@@ -1,0 +1,50 @@
+/* Estilos para el html principal */
+body {
+        background-color: rgb(112, 109, 109);
+        margin: 0;
+      }
+      
+      /* Estilos header */
+      .header {
+        display: flex;
+        align-items: center;
+        padding: 5px, 5px;
+        padding-right: 3%;
+        position: fixed;
+        top:0%;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.5);
+        z-index: 100; 
+      }
+       .logo {
+        flex: 1;
+      }
+      .logo img {
+        width: 6%;
+        display: block;
+      }
+      
+      /* Estilo título principal h1 */
+      .titulo-principal {
+        font-size: 72px;
+        line-height: 75px;
+        color: white;
+        text-align: center;
+        font-family: Georgia, serif;
+        letter-spacing: 1px;
+        padding: 1px;
+        margin-top: 60px; 
+      }
+      
+      .video {
+        width: 70%;
+        margin-top: 15px; 
+        height: auto;
+        margin-left: 160px;
+             }
+     
+      /* estilo html about me*/
+
+      .imagen-aboutme {width: 15%;}
+       .imagenes-about-me {text-align:center;}              
+       .texto-about-me {color: white; }
