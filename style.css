@@ -45,6 +45,7 @@ body {
      
       /* estilo html about me*/
 
-      .imagen-aboutme {width: 15%;}
+      .imagen-aboutme {width: 15%;
+      border-radius: 50%;}
        .imagenes-about-me {text-align:center;}              
        .texto-about-me {color: white; }
