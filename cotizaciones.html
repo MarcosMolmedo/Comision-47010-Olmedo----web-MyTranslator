@@ -14,17 +14,54 @@
 </head>
 
 <body>
-    <H1>Cotizaciones</H1>
+   <script>
+    /* Función para obtener el nombre del usuario*/
+    function obtenerNombre() {
+         Swal.fire({
+            title: 'Bienvenido a My Translator',
+            text: '¿Cuál es tu nombre?',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: false,
+            confirmButtonText: 'Enviar',
+            showLoaderOnConfirm: true,
+            preConfirm: (nombre) => {
+                if (!nombre) {
+                    Swal.showValidationMessage('Por favor, ingresa tu nombre');
+                }
+                return nombre;
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var nombre = result.value;       
+                localStorage.setItem("nombreUsuario", nombre);
+                  Swal.fire(
+                    'Gracias ' + nombre + ', por interesarte en nuestros servicios',
+                    '',
+                    'success'
+                );
+            }
+        });
+    }
+    window.onload = obtenerNombre;
+</script>
+  </script>
+ <h2>Cotizaciones</h2>
 
-    <h3>Cotizaciones en linea sobre servicios de Interpretación </h3>
+    <h4>Cotizaciones en linea sobre servicios de Interpretación </h4>
      <p>Las cotizaciones son estimativas y sujeto a la cotizacion del Banco Nacion (solo para usuarios de la Republica Argentina)</p>
      <button id="nuevaInteraccionBtn" onclick="traducciones()">Hacer click aquí</button>
-   <h3>Cotizaciones en linea sobre servicios de traducciones</h3>
+   <h4>Cotizaciones en linea sobre servicios de traducciones</h4>
      <p>Las cotizaciones son estimativas y sujeto a la cotizacion del Banco Nacion (solo para usuarios de la Republica Argentina)</p>
       <button id="traduccionesBtn">Hacer click aquí </button>
-   <h3>Cotizaciones sobre clases individuales o grupales</h3>
+   <h4>Cotizaciones sobre clases individuales o grupales</h4>
      <p>Las cotizaciones son estimativas y sujeto a la cotizacion del Banco Nacion (solo para usuarios de la Republica Argentina)</p>
       <button id="clasesBtn">Hacer click aquí </button>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
 </body>
 </html>
+
+
+
