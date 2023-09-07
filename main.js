@@ -40,10 +40,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
-/*interacion para que el usuario seleccione tipo de traduccion, se declara function*/
-    traduccionesBtn.addEventListener("click", function() {
-        realizarCotizacionTraducciones();
-    });
 
     function realizarCotizacionClases(idioma) {
         Swal.fire({
@@ -90,6 +86,9 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 /*interacion para que el usuario seleccione tipo de traduccion*/
+traduccionesBtn.addEventListener("click", function() {
+    realizarCotizacionTraducciones();
+});
     function realizarCotizacionTraducciones() {
         Swal.mixin({
             progressSteps: ['1', '2', '3', '4', '5', '6'],
@@ -213,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return { costo: costoTotal, descripcion, cantidadClases };
     }
 });
-/*interacion para que el usuario seleccione tipo de traduccion, se declara function*/
+/*interacion para que el usuario seleccione tipo de interpretacion, se declara function*/
 function traducciones() {
     Swal.mixin({
       progressSteps: ['1', '2', '3', '4', '5', '6', '7'],
@@ -280,7 +279,6 @@ function traducciones() {
         const email = answers[4];
         const recibirCotizacion = answers[5];
   
-        // Aquí puedes procesar las respuestas y mostrar un resumen final
         let resumen = `Traducción: ${traduccion}\n`;
         resumen += `Tipo de Interpretación: ${interpretacion}\n`;
         resumen += `País: ${pais}\n`;
