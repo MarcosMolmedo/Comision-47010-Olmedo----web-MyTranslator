@@ -1,15 +1,48 @@
-/* Funciones */
+/* Función para obtener el nombre del usuario */
+function obtenerNombre() {
+    Swal.fire({
+        title: 'Bienvenido a My Translator',
+        text: '¿Cuál es tu nombre?',
+        input: 'text',
+        inputAttributes: {
+            autocapitalize: 'off'
+        },
+        showCancelButton: false,
+        confirmButtonText: 'Enviar',
+        showLoaderOnConfirm: true,
+        preConfirm: (nombre) => {
+            if (!nombre) {
+                Swal.showValidationMessage('Por favor, ingresa tu nombre');
+            }
+            return nombre;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var nombre = result.value;
+            localStorage.setItem("nombreUsuario", nombre); // Almacenar el nombre en localStorage
+            Swal.fire(
+                'Gracias ' + nombre + ', por interesarte en nuestros servicios',
+                '',
+                'success'
+            );
+        }
+    });
+}
+
+/* Función para mostrar el nombre del usuario en el resumen final */
+function mostrarResumenConNombre(nombreUsuario, resumen) {
+    Swal.fire({
+        title: 'Resumen de Cotización',
+        html: `Hola ${nombreUsuario}, recibirás un correo electrónico con la información solicitada.<br>${resumen}`,
+        confirmButtonText: 'Aceptar',
+    });
+}
 
 /* Función para controlar el video inicial del index */
 function controlarVideo() {
     const video = document.querySelector(".video");
 
     video.addEventListener("loadedmetadata", function() {
-        video.currentTime = 3;
-        video.play();
-    });
-
-    video.addEventListener("ended", function() {
         video.currentTime = 3;
         video.play();
     });
@@ -45,12 +78,11 @@ function realizarCotizacionClases(idioma) {
                 if (paqueteResult.isConfirmed) {
                     const paquete = paqueteResult.value;
                     const { costo, descripcion, cantidadClases } = calcularCostoClase(tipoClase, paquete);
-
-                    Swal.fire({
-                        title: "Resumen Final",
-                        html: `Tipo de Clase: ${descripcion}<br>Cantidad de Clases: ${cantidadClases}<br>Costo Total: ${costo} euros`,
-                        confirmButtonText: "Aceptar",
-                    });
+                    mostrarResumenConNombre(localStorage.getItem("nombreUsuario"), `
+                        Tipo de Clase: ${descripcion}<br>
+                        Cantidad de Clases: ${cantidadClases}<br>
+                        Costo Total: ${costo} euros
+                    `);
                 } else if (paqueteResult.dismiss === Swal.DismissReason.cancel) {
                     Swal.fire("Acción cancelada.", "", "info");
                 }
@@ -70,8 +102,8 @@ function realizarCotizacionTraducciones() {
             title: '¿De qué idioma a qué idioma desea traducir?',
             input: 'select',
             inputOptions: {
-                '1': 'Inglés a Español',
-                '2': 'Español a Inglés'
+                'ingles-espanol': 'Inglés a Español',
+                'espanol-ingles': 'Español a Inglés'
             },
         },
         {
@@ -127,18 +159,29 @@ function realizarCotizacionTraducciones() {
     ]).then((result) => {
         if (result.value) {
             const answers = result.value;
-            Swal.fire({
-                title: 'Resumen de Respuestas',
-                html: `
-                    De Idioma a Idioma: ${answers[0]}<br>
-                    Tipo de Documento: ${answers[1]}<br>
-                    Lugar de Presentación: ${answers[2]}<br>
-                    Fecha de Necesidad: ${answers[3]}<br>
-                    Cantidad de Fojas: ${answers[4]}<br>
-                    Apostillar: ${answers[5]}
-                `,
-                confirmButtonText: 'Aceptar',
-            });
+            const idioma = answers[0];
+            const tipoDocumento = answers[1];
+            const lugarPresentacion = answers[2];
+            const fechaNecesidad = answers[3];
+            const cantidadFojas = answers[4];
+            const apostillar = answers[5];
+
+            // Convertir respuestas numéricas en texto
+            const idiomaTexto = (idioma === 'ingles-espanol') ? 'Inglés a Español' : 'Español a Inglés';
+            const tipoDocumentoTexto = (tipoDocumento === '1') ? 'Jurídico' : 'Otros';
+            const lugarPresentacionTexto = (lugarPresentacion === '1') ? 'Municipalidad' : ((lugarPresentacion === '2') ? 'Centro Educativo' : 'Otros');
+            const fechaNecesidadTexto = (fechaNecesidad === '1') ? '7 días' : ((fechaNecesidad === '2') ? '14 días' : '+21 días');
+            const cantidadFojasTexto = cantidadFojas;
+            const apostillarTexto = (apostillar === '1') ? 'Sí' : 'No';
+
+            mostrarResumenConNombre(localStorage.getItem("nombreUsuario"), `
+                De Idioma a Idioma: ${idiomaTexto}<br>
+                Tipo de Documento: ${tipoDocumentoTexto}<br>
+                Lugar de Presentación: ${lugarPresentacionTexto}<br>
+                Fecha de Necesidad: ${fechaNecesidadTexto}<br>
+                Cantidad de Fojas: ${cantidadFojasTexto}<br>
+                Apostillar: ${apostillarTexto}
+            `);
         }
     });
 }
@@ -186,6 +229,92 @@ function calcularCostoClase(tipoClase, paquete) {
     return { costo: costoTotal, descripcion, cantidadClases };
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    // Recuperar el nombre del usuario del localStorage si está almacenado
+    const nombreUsuario = localStorage.getItem("nombreUsuario");
+
+    if (nombreUsuario) {
+        // Si el nombre del usuario está almacenado, mostrar un mensaje de bienvenida personalizado
+        Swal.fire(
+            'Bienvenido de nuevo, ' + nombreUsuario,
+            '¿En qué podemos ayudarte hoy?',
+            'info'
+        );
+    } else {
+        // Si el nombre del usuario no está almacenado, solicitarlo
+        obtenerNombre();
+    }
+
+    const cotizarBtn = document.getElementById("cotizarBtn");
+
+    cotizarBtn.addEventListener("click", function() {
+        Swal.mixin({
+            progressSteps: ['1', '2', '3', '4', '5', '6'],
+        }).queue([
+            {
+                title: 'Idioma de Interpretación',
+                input: 'select',
+                inputOptions: {
+                    'ingles-espanol': 'Inglés a Español',
+                    'espanol-ingles': 'Español a Inglés'
+                },
+            },
+            {
+                title: 'País de Interpretación',
+                input: 'select',
+                inputOptions: {
+                    'netherlands': 'Netherlands',
+                    'argentina': 'Argentina',
+                    'ue': 'Otro país de la UE',
+                    'otros': 'Otros'
+                },
+            },
+            {
+                title: 'Tipo de Interpretación',
+                input: 'select',
+                inputOptions: {
+                    'juridica': 'Jurídica',
+                    'turismo': 'Turismo',
+                    'congreso-medico': 'Congreso Médico',
+                    'casamiento': 'Casamiento',
+                    'otros': 'Otros'
+                },
+            },
+            {
+                title: 'Duración del Evento',
+                input: 'select',
+                inputOptions: {
+                    '2-horas': '2 horas',
+                    '4-horas': '4 horas',
+                    '6-horas': '6 horas',
+                    '8-horas': '8 horas',
+                    'mas-8-horas': '+8 horas'
+                },
+            },
+            {
+                title: 'Email',
+                input: 'email',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+            }
+        ]).then((result) => {
+            if (result.value) {
+                const answers = result.value;
+                const resumen = `
+                    Idioma de Interpretación: ${answers[0]}<br>
+                    País de Interpretación: ${answers[1]}<br>
+                    Tipo de Interpretación: ${answers[2]}<br>
+                    Duración del Evento: ${answers[3]}<br>
+                    Email: ${answers[4]}
+                `;
+
+                mostrarResumenConNombre(localStorage.getItem("nombreUsuario"), resumen);
+            }
+        });
+    });
+});
+
 /* Event Listeners */
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -220,3 +349,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
 /* Video */
 window.onload = controlarVideo;
+

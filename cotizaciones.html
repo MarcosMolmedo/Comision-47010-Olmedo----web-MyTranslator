@@ -10,58 +10,149 @@
     <link rel="shortcut icon" href="imagenes/logo my translator">
     <script src="./main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
 </head>
-
 <body>
-   <script>
-    /* Función para obtener el nombre del usuario*/
-    function obtenerNombre() {
-         Swal.fire({
-            title: 'Bienvenido a My Translator',
-            text: '¿Cuál es tu nombre?',
-            input: 'text',
-            inputAttributes: {
-                autocapitalize: 'off'
-            },
-            showCancelButton: false,
-            confirmButtonText: 'Enviar',
-            showLoaderOnConfirm: true,
-            preConfirm: (nombre) => {
-                if (!nombre) {
-                    Swal.showValidationMessage('Por favor, ingresa tu nombre');
+    <div class="header">
+        <a href="index.html" class="logo">
+            <img src="imagenes/logo my translator" alt="Company Logo">
+        </a>
+        <div class="header-right">
+            <a class="active" href="../web yoha/index.html">Inicio</a>
+            <a href="../web yoha/contacto.html">Contacto</a>
+            <a href="../web yoha/Aboutme.html">Sobre mi</a>
+            <a href="../web yoha/cotizaciones.html">Cotizaciones</a>
+        </div>
+    </div>
+    <script>
+        /* Función para obtener el nombre del usuario */
+        function obtenerNombre() {
+            Swal.fire({
+                title: 'Bienvenido a My Translator',
+                text: '¿Cuál es tu nombre?',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: false,
+                confirmButtonText: 'Enviar',
+                showLoaderOnConfirm: true,
+                preConfirm: (nombre) => {
+                    if (!nombre) {
+                        Swal.showValidationMessage('Por favor, ingresa tu nombre');
+                    }
+                    return nombre;
                 }
-                return nombre;
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                var nombre = result.value;       
-                localStorage.setItem("nombreUsuario", nombre);
-                  Swal.fire(
-                    'Gracias ' + nombre + ', por interesarte en nuestros servicios',
-                    '',
-                    'success'
-                );
-            }
-        });
-    }
-    window.onload = obtenerNombre;
-</script>
-  </script>
- <h2>Cotizaciones</h2>
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var nombre = result.value;
+                    localStorage.setItem("nombreUsuario", nombre);
+                    Swal.fire(
+                        'Gracias ' + nombre + ', por interesarte en nuestros servicios',
+                        '',
+                        'success'
+                    );
+                }
+            });
+        }
+        window.onload = obtenerNombre;
+    </script>
+
+<div class="titulo-principal">
+    <h2>Cotizaciones</h2>
+  </div>
 
     <h4>Cotizaciones en linea sobre servicios de Interpretación </h4>
-     <p>Las cotizaciones son estimativas y sujeto a la cotizacion del Banco Nacion (solo para usuarios de la Republica Argentina)</p>
-     <button id="nuevaInteraccionBtn" onclick="traducciones()">Hacer click aquí</button>
-   <h4>Cotizaciones en linea sobre servicios de traducciones</h4>
-     <p>Las cotizaciones son estimativas y sujeto a la cotizacion del Banco Nacion (solo para usuarios de la Republica Argentina)</p>
-      <button id="traduccionesBtn">Hacer click aquí </button>
-   <h4>Cotizaciones sobre clases individuales o grupales</h4>
-     <p>Las cotizaciones son estimativas y sujeto a la cotizacion del Banco Nacion (solo para usuarios de la Republica Argentina)</p>
-      <button id="clasesBtn">Hacer click aquí </button>
-   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+    <p>Las cotizaciones son estimativas y sujeto a la cotizacion del Banco Nacion (solo para usuarios de la Republica Argentina)</p>
+    <button id="cotizarBtn">Hacer click aquí para Cotizar Interpretación</button>
+
+    
+    <h4>Cotizaciones en linea sobre servicios de traducciones</h4>
+    <p>Las cotizaciones son estimativas y sujeto a la cotizacion del Banco Nacion (solo para usuarios de la Republica Argentina)</p>
+    <button id="traduccionesBtn">Hacer click aquí para Cotizar Traducciones</button>
+   
+    <h4>Cotizaciones sobre clases individuales o grupales</h4>
+    <p>Las cotizaciones son estimativas y sujeto a la cotizacion del Banco Nacion (solo para usuarios de la Republica Argentina)</p>
+    <button id="clasesBtn">Hacer click aquí para Cotizar Clases</button>
+   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const interpretacionBtn = document.getElementById("interpretacionBtn");
+            const traduccionesBtn = document.getElementById("traduccionesBtn");
+            const clasesBtn = document.getElementById("clasesBtn");
+
+            interpretacionBtn.addEventListener("click", function() {
+                realizarCotizacionInterpretacion();
+            });
+
+            traduccionesBtn.addEventListener("click", function() {
+                realizarCotizacionTraducciones();
+            });
+
+            clasesBtn.addEventListener("click", function() {
+                Swal.fire({
+                    title: "¿Qué idioma desea aprender?",
+                    input: "select",
+                    inputOptions: {
+                        '1': 'Inglés',
+                        '2': 'Español'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: "Aceptar",
+                    cancelButtonText: "Cancelar",
+                }).then((idiomaResult) => {
+                    if (idiomaResult.isConfirmed) {
+                        const idioma = idiomaResult.value;
+                        realizarCotizacionClases(idioma);
+                    } else {
+                        Swal.fire("Acción cancelada.", "", "info");
+                    }
+                });
+            });
+        });
+    </script>
+     <!-- Agrega este código HTML para mostrar la hora de Argentina y Países Bajos -->
+     <div class="uso-horario">
+        <span id="argentinaTime">Cargando...</span>
+        <span id="paisesBajosTime">Cargando...</span>
+    </div>
+
+    <script>
+        // Tu API Key
+        const apiKey = "WG6JHWJ3TN2U";
+
+        // Función para obtener la hora actual de Argentina y Países Bajos
+        function obtenerHora() {
+            const argentinaUrl = `https://api.timezonedb.com/v2.1/get-time-zone?key=${apiKey}&format=json&by=zone&zone=America/Argentina/Buenos_Aires`;
+            const paisesBajosUrl = `https://api.timezonedb.com/v2.1/get-time-zone?key=${apiKey}&format=json&by=zone&zone=Europe/Amsterdam`;
+
+            // Obtener la hora de Argentina
+            fetch(argentinaUrl)
+                .then((response) => response.json())
+                .then((data) => {
+                    const horaArgentina = new Date(data.timestamp * 1000); // Convertir la marca de tiempo en una fecha
+                    const horaArgentinaString = horaArgentina.toLocaleTimeString(); // Obtener la hora en formato de cadena
+
+                    // Mostrar la hora de Argentina en el elemento con id "argentinaTime"
+                    document.getElementById("argentinaTime").textContent = `Hora de Argentina: ${horaArgentinaString}`;
+                });
+
+            // Obtener la hora de Países Bajos
+            fetch(paisesBajosUrl)
+                .then((response) => response.json())
+                .then((data) => {
+                    const horaPaisesBajos = new Date(data.timestamp * 1000); // Convertir la marca de tiempo en una fecha
+                    const horaPaisesBajosString = horaPaisesBajos.toLocaleTimeString(); // Obtener la hora en formato de cadena
+
+                    // Mostrar la hora de Países Bajos en el elemento con id "paisesBajosTime"
+                    document.getElementById("paisesBajosTime").textContent = `Hora de Países Bajos: ${horaPaisesBajosString}`;
+                });
+        }
+
+        // Llamar a la función para obtener la hora cuando se carga la página
+        document.addEventListener("DOMContentLoaded", function () {
+            obtenerHora();
+        });
+    </script>
 </body>
 </html>
-
-
-
