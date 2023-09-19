@@ -111,48 +111,43 @@
             });
         });
     </script>
-     <!-- Agrega este código HTML para mostrar la hora de Argentina y Países Bajos -->
+    
      <div class="uso-horario">
         <span id="argentinaTime">Cargando...</span>
         <span id="paisesBajosTime">Cargando...</span>
     </div>
 
     <script>
-        // Tu API Key
+       
         const apiKey = "WG6JHWJ3TN2U";
-
-        // Función para obtener la hora actual de Argentina y Países Bajos
+      
+        /* Función para obtener la hora actual de Argentina y Países Bajos*/
         function obtenerHora() {
             const argentinaUrl = `https://api.timezonedb.com/v2.1/get-time-zone?key=${apiKey}&format=json&by=zone&zone=America/Argentina/Buenos_Aires`;
             const paisesBajosUrl = `https://api.timezonedb.com/v2.1/get-time-zone?key=${apiKey}&format=json&by=zone&zone=Europe/Amsterdam`;
-
-            // Obtener la hora de Argentina
+      
+            
             fetch(argentinaUrl)
                 .then((response) => response.json())
                 .then((data) => {
-                    const horaArgentina = new Date(data.timestamp * 1000); // Convertir la marca de tiempo en una fecha
-                    const horaArgentinaString = horaArgentina.toLocaleTimeString(); // Obtener la hora en formato de cadena
-
-                    // Mostrar la hora de Argentina en el elemento con id "argentinaTime"
+                    const horaArgentina = new Date(data.timestamp * 1000); 
+                    const horaArgentinaString = horaArgentina.toLocaleTimeString();
+      
                     document.getElementById("argentinaTime").textContent = `Hora de Argentina: ${horaArgentinaString}`;
                 });
-
-            // Obtener la hora de Países Bajos
+      
             fetch(paisesBajosUrl)
                 .then((response) => response.json())
                 .then((data) => {
-                    const horaPaisesBajos = new Date(data.timestamp * 1000); // Convertir la marca de tiempo en una fecha
-                    const horaPaisesBajosString = horaPaisesBajos.toLocaleTimeString(); // Obtener la hora en formato de cadena
-
-                    // Mostrar la hora de Países Bajos en el elemento con id "paisesBajosTime"
+                    const horaPaisesBajos = new Date(data.timestamp * 1000); 
+                    const horaPaisesBajosString = horaPaisesBajos.toLocaleTimeString(); 
                     document.getElementById("paisesBajosTime").textContent = `Hora de Países Bajos: ${horaPaisesBajosString}`;
                 });
         }
-
-        // Llamar a la función para obtener la hora cuando se carga la página
+      
         document.addEventListener("DOMContentLoaded", function () {
             obtenerHora();
         });
-    </script>
+      </script>
 </body>
 </html>

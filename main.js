@@ -19,11 +19,10 @@ function obtenerNombre() {
     }).then((result) => {
         if (result.isConfirmed) {
             var nombre = result.value;
-            localStorage.setItem("nombreUsuario", nombre); // Almacenar el nombre en localStorage
+            localStorage.setItem("nombreUsuario", nombre);
             Swal.fire(
                 'Gracias ' + nombre + ', por interesarte en nuestros servicios',
                 '',
-                'success'
             );
         }
     });
@@ -34,7 +33,7 @@ function mostrarResumenConNombre(nombreUsuario, resumen) {
     Swal.fire({
         title: 'Resumen de Cotización',
         html: `Hola ${nombreUsuario}, recibirás un correo electrónico con la información solicitada.<br>${resumen}`,
-        confirmButtonText: 'Aceptar',
+        confirmButtonText: 'COMPRAR',
     });
 }
 
@@ -93,8 +92,8 @@ function realizarCotizacionClases(idioma) {
     });
 }
 
-/* Función para realizar la cotización de traducciones */
-function realizarCotizacionTraducciones() {
+/* Función para cotizar servicios de traducción */
+function cotizarTraducciones() {
     Swal.mixin({
         progressSteps: ['1', '2', '3', '4', '5', '6'],
     }).queue([
@@ -166,7 +165,6 @@ function realizarCotizacionTraducciones() {
             const cantidadFojas = answers[4];
             const apostillar = answers[5];
 
-            // Convertir respuestas numéricas en texto
             const idiomaTexto = (idioma === 'ingles-espanol') ? 'Inglés a Español' : 'Español a Inglés';
             const tipoDocumentoTexto = (tipoDocumento === '1') ? 'Jurídico' : 'Otros';
             const lugarPresentacionTexto = (lugarPresentacion === '1') ? 'Municipalidad' : ((lugarPresentacion === '2') ? 'Centro Educativo' : 'Otros');
@@ -230,22 +228,23 @@ function calcularCostoClase(tipoClase, paquete) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Recuperar el nombre del usuario del localStorage si está almacenado
-    const nombreUsuario = localStorage.getItem("nombreUsuario");
+    let nombreUsuario = localStorage.getItem("nombreUsuario");
 
-    if (nombreUsuario) {
-        // Si el nombre del usuario está almacenado, mostrar un mensaje de bienvenida personalizado
+    if (!nombreUsuario) {
+        obtenerNombre();
+    } else {
         Swal.fire(
             'Bienvenido de nuevo, ' + nombreUsuario,
             '¿En qué podemos ayudarte hoy?',
             'info'
         );
-    } else {
-        // Si el nombre del usuario no está almacenado, solicitarlo
-        obtenerNombre();
     }
 
     const cotizarBtn = document.getElementById("cotizarBtn");
+    const clasesBtn = document.getElementById("clasesBtn");
+    const traduccionesBtn = document.getElementById("traduccionesBtn");
+
+    /* Función para calcular el costo de las clases */
 
     cotizarBtn.addEventListener("click", function() {
         Swal.mixin({
@@ -313,13 +312,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
-});
-
-/* Event Listeners */
-
-document.addEventListener("DOMContentLoaded", function() {
-    const clasesBtn = document.getElementById("clasesBtn");
-    const traduccionesBtn = document.getElementById("traduccionesBtn");
 
     clasesBtn.addEventListener("click", function() {
         Swal.fire({
@@ -343,10 +335,9 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     traduccionesBtn.addEventListener("click", function() {
-        realizarCotizacionTraducciones();
+        cotizarTraducciones();
     });
+
+    /* Video */
+    window.onload = controlarVideo;
 });
-
-/* Video */
-window.onload = controlarVideo;
-

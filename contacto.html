@@ -51,6 +51,45 @@
     <input type="submit" value="Enviar">
   </form>
 
+<div class="uso-horario">
+  <span id="argentinaTime">Cargando...</span>
+  <span id="paisesBajosTime">Cargando...</span>
+</div>
+
+<script>
+       
+  const apiKey = "WG6JHWJ3TN2U";
+
+  /* Función para obtener la hora actual de Argentina y Países Bajos*/
+  function obtenerHora() {
+      const argentinaUrl = `https://api.timezonedb.com/v2.1/get-time-zone?key=${apiKey}&format=json&by=zone&zone=America/Argentina/Buenos_Aires`;
+      const paisesBajosUrl = `https://api.timezonedb.com/v2.1/get-time-zone?key=${apiKey}&format=json&by=zone&zone=Europe/Amsterdam`;
+
+      
+      fetch(argentinaUrl)
+          .then((response) => response.json())
+          .then((data) => {
+              const horaArgentina = new Date(data.timestamp * 1000); 
+              const horaArgentinaString = horaArgentina.toLocaleTimeString();
+
+              document.getElementById("argentinaTime").textContent = `Hora de Argentina: ${horaArgentinaString}`;
+          });
+
+      fetch(paisesBajosUrl)
+          .then((response) => response.json())
+          .then((data) => {
+              const horaPaisesBajos = new Date(data.timestamp * 1000); 
+              const horaPaisesBajosString = horaPaisesBajos.toLocaleTimeString(); 
+              document.getElementById("paisesBajosTime").textContent = `Hora de Países Bajos: ${horaPaisesBajosString}`;
+          });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+      obtenerHora();
+  });
+</script>
+
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
 </html>
