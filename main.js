@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const clasesBtn = document.getElementById("clasesBtn");
     const traduccionesBtn = document.getElementById("traduccionesBtn");
 
-    /* Función para calcular el costo de las clases */
+    /* Función para calcular el costo del servicio de interpretacion*/
 
     cotizarBtn.addEventListener("click", function() {
         Swal.mixin({
@@ -338,6 +338,6 @@ document.addEventListener("DOMContentLoaded", function() {
         cotizarTraducciones();
     });
 
-    /* Video */
+    /* Video index */
     window.onload = controlarVideo;
 });
